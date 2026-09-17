@@ -84,6 +84,47 @@ export interface RelationshipResult {
 }
 
 
+// ── Categorical models (Phase 5) ──────────────────────────────────────────
+
+export interface CatCatPair {
+  feature_a: string;
+  feature_b: string;
+  cramers_v: number;
+  p_value: number;
+  valid_rows: number;
+  strength: string;
+}
+
+export interface GroupStat {
+  category: string;
+  count: number;
+  mean: number;
+  median: number;
+  min: number;
+  max: number;
+}
+
+export interface CatNumPair {
+  categorical_feature: string;
+  numerical_feature: string;
+  eta_squared: number;
+  p_value: number;
+  valid_rows: number;
+  strength: string;
+  groups: GroupStat[];
+}
+
+export interface CategoricalResult {
+  cat_columns_analyzed: string[];
+  num_columns_analyzed: string[];
+  skipped_columns: SkippedColumn[];
+  cat_cat_pairs: CatCatPair[];
+  cat_num_pairs: CatNumPair[];
+  top_cat_cat: CatCatPair[];
+  info_messages: string[];
+}
+
+
 // ── Upload response ─────────────────────────────────────────────────────────
 
 /** The JSON response returned by POST /api/datasets/upload */
@@ -114,6 +155,9 @@ export interface UploadResponse {
 
   /** Pairwise numerical relationships (Phase 4) */
   relationships?: RelationshipResult;
+
+  /** Categorical relationships (Phase 5) */
+  categorical?: CategoricalResult;
 }
 
 /** Possible UI states for the upload flow */
