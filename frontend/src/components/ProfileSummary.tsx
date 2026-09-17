@@ -76,10 +76,20 @@ function TypeBadge({ icon, label, count, color }: TypeBadgeProps) {
 export default function ProfileSummary({ profile }: ProfileSummaryProps) {
   return (
     <div className="w-full space-y-4">
-      {/* Section header */}
-      <div className="flex items-center gap-2">
-        <BarChart3 className="w-4 h-4 text-accent" />
-        <h2 className="text-[15px] font-semibold text-navy">Dataset Profile</h2>
+      {/* Detailed Column Profiles (Bounded Scroll Area) */}
+      <div className="max-h-[600px] overflow-y-auto custom-scrollbar border-t border-slate-200">
+        <table className="w-full text-left border-collapse">
+          <thead className="bg-slate-50 sticky top-0 z-10 shadow-sm">
+            <tr>
+              <th className="p-3 text-[15px] font-semibold text-navy">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4 text-accent" />
+                  <span>Dataset Profile</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
       </div>
 
       {/* Stat cards grid */}

@@ -105,6 +105,7 @@ class RelationshipResult(BaseModel):
     pairs: list[RelationshipPair]
     top_relationships: list[RelationshipPair]
     correlation_matrix: CorrelationMatrix
+    scatter_samples: dict[str, dict[str, list[dict[str, float]]]] | None = None
     info_messages: list[str]
 
 
@@ -229,6 +230,7 @@ class RegressionDetails(BaseModel):
     skewness: float | None = None
     outlier_summary: str
     enough_variation: bool
+    target_histogram: list[dict[str, float]] | None = None
 
 class FeatureReadiness(BaseModel):
     recommended_features: list[str]

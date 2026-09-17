@@ -27,3 +27,4 @@ export default function InsightsView({ data, onChangeView }: { data: UploadRespo
     </div>
   );
 }
+

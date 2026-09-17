@@ -86,8 +86,9 @@ def analyze_relationships(df: pd.DataFrame) -> dict[str, Any]:
         corr_matrix[i][i] = 1.0
 
     pairs = []
+    scatter_samples = {}
 
-    # 3. Pairwise calculation
+    # 3. Analyze pairs
     for i in range(n_cols):
         col_a = numeric_cols[i]
         for j in range(i + 1, n_cols):
@@ -141,6 +142,22 @@ def analyze_relationships(df: pd.DataFrame) -> dict[str, Any]:
                 "valid_rows": valid_rows,
                 "strength": _get_strength(p_corr, s_corr)
             })
+            
+            if col_a not in scatter_samples: scatter_samples[col_a] = {}
+            if col_b not in scatter_samples: scatter_samples[col_b] = {}
+            
+            # Sample max 100 points
+            if valid_rows > 100:
+                indices = np.random.choice(valid_rows, 100, replace=False)
+                x_sample = x[indices]
+                y_sample = y[indices]
+            else:
+                x_sample = x
+                y_sample = y
+                
+            sample_data = [{"x": float(a), "y": float(b)} for a, b in zip(x_sample, y_sample)]
+            scatter_samples[col_a][col_b] = sample_data
+            scatter_samples[col_b][col_a] = [{"x": float(b), "y": float(a)} for a, b in zip(x_sample, y_sample)]
 
     # 4. Sorting & Top 5
     # Sort by absolute pearson (or spearman if pearson is missing), descending
@@ -156,5 +173,6 @@ def analyze_relationships(df: pd.DataFrame) -> dict[str, Any]:
             "columns": numeric_cols,
             "values": corr_matrix
         },
+        "scatter_samples": scatter_samples,
         "info_messages": info_messages
     }

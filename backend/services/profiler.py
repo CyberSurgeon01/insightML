@@ -103,14 +103,56 @@ def _profile_column(series: pd.Series) -> dict[str, Any]:
         "max": None,
         "mean": None,
         "median": None,
+        "outlier_count": None,
+        "histogram": None,
+        "value_counts": None,
     }
 
-    # Numerical stats — only for numerical columns with at least one non-null
+    # Value counts for categorical or boolean
+    if col_type in ["categorical", "boolean"] and missing < total:
+        val_counts = series.value_counts(dropna=True)
+        top_k = val_counts.head(10)
+        v_counts = [{"category": str(k), "count": int(v)} for k, v in top_k.items()]
+        
+        # Add 'Other' if there are more than 10 categories
+        if len(val_counts) > 10:
+            other_count = int(val_counts.iloc[10:].sum())
+            if other_count > 0:
+                v_counts.append({"category": "Other", "count": other_count})
+        result["value_counts"] = v_counts
+
+    # Numerical stats
     if col_type == "numerical" and missing < total:
-        result["min"] = _safe_round(series.min())
-        result["max"] = _safe_round(series.max())
-        result["mean"] = _safe_round(series.mean())
-        result["median"] = _safe_round(series.median())
+        numeric_series = pd.to_numeric(series, errors='coerce').dropna()
+        if len(numeric_series) > 0:
+            result["min"] = _safe_round(numeric_series.min())
+            result["max"] = _safe_round(numeric_series.max())
+            result["mean"] = _safe_round(numeric_series.mean())
+            result["median"] = _safe_round(numeric_series.median())
+            
+            # Outlier count (IQR method)
+            q1 = numeric_series.quantile(0.25)
+            q3 = numeric_series.quantile(0.75)
+            iqr = q3 - q1
+            lower_bound = q1 - 1.5 * iqr
+            upper_bound = q3 + 1.5 * iqr
+            outliers = numeric_series[(numeric_series < lower_bound) | (numeric_series > upper_bound)]
+            result["outlier_count"] = int(len(outliers))
+            
+            # Histogram
+            try:
+                import numpy as np
+                counts, bin_edges = np.histogram(numeric_series, bins=10)
+                hist_data = []
+                for i in range(len(counts)):
+                    hist_data.append({
+                        "bin_start": float(bin_edges[i]),
+                        "bin_end": float(bin_edges[i+1]),
+                        "count": int(counts[i])
+                    })
+                result["histogram"] = hist_data
+            except Exception:
+                pass
 
     return result
 

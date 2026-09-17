@@ -74,6 +74,11 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Client-Side State Persistence:** Clicking through the sidebar views (`Overview`, `Profile`, `Relationships`, etc.) uses URL state and retains all backend computation perfectly without re-uploading the file.
 - **Improved UX:** Bounded scrolling for extremely large tables, collapsible mobile navigation drawer, and polished KPI cards.
 
+### Phase 12 — Visual Explorer
+- **Interactive Dashboards:** Embedded responsive, accessible charts natively into each dashboard view using `recharts`.
+- **Zero-Latency Interactions:** The backend pre-calculates deterministic scatter plot samples (max 100 points) and distribution histograms in the initial upload response, allowing users to cross-filter and explore pairs instantaneously without file re-uploads.
+- **Visual Explorers:** Added a Column Distribution Explorer (histograms/bar charts) and a Heatmap Pair Explorer (scatter plots) that activate by clicking on dataset profiles or correlation matrix cells.
+
 ---
 
 ## Project Structure
@@ -194,3 +199,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 9 | ✅ Complete | Target Selection & ML Readiness |
 | 10 | ✅ Complete | Baseline Model Training and Evaluation |
 | 11 | ✅ Complete | Modern Dashboard Refactor |
+| 12 | ✅ Complete | Visual Explorer |

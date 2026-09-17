@@ -9,6 +9,7 @@ import type { CorrelationMatrix } from "@/types/dataset";
 
 interface CorrelationHeatmapProps {
   matrix: CorrelationMatrix;
+  onCellClick?: (colA: string, colB: string, value: number) => void;
 }
 
 /** Interpolate between blue (-1), white (0), and red (+1) */
@@ -41,7 +42,7 @@ function getTextColor(value: number | null): string {
   return Math.abs(value) > 0.5 ? "#ffffff" : "#334155";
 }
 
-export default function CorrelationHeatmap({ matrix }: CorrelationHeatmapProps) {
+export default function CorrelationHeatmap({ matrix, onCellClick }: CorrelationHeatmapProps) {
   const { columns, values } = matrix;
   const n = columns.length;
   
@@ -72,19 +73,31 @@ export default function CorrelationHeatmap({ matrix }: CorrelationHeatmapProps) 
             </div>
             
             {/* Row Cells */}
-            {values[i].map((val, j) => (
-              <div 
-                key={`cell-${i}-${j}`} 
-                className="w-12 h-12 shrink-0 border border-white flex items-center justify-center text-[10px] font-medium tabular-nums transition-transform hover:scale-110 hover:shadow-sm hover:z-10 cursor-default"
-                style={{ 
-                  backgroundColor: getColor(val),
-                  color: getTextColor(val)
-                }}
-                title={`${colRow} ↔ ${columns[j]}\nPearson: ${val !== null ? val.toFixed(4) : "N/A"}`}
-              >
-                {val !== null ? (val === 1.0 ? "1.0" : val.toFixed(2)) : "—"}
-              </div>
-            ))}
+            {values[i].map((val, j) => {
+              const rowName = colRow;
+              const colName = columns[j];
+              const value = matrix.values[i][j];
+              return (
+                <div
+                  key={`cell-${i}-${j}`}
+                  onClick={() => {
+                    if (value !== null && i !== j && onCellClick) {
+                      onCellClick(rowName, colName, value);
+                    }
+                  }}
+                  className={`w-12 h-12 shrink-0 border border-white flex items-center justify-center text-[10px] transition-colors
+                    ${value !== null && i !== j ? 'hover:ring-2 hover:ring-indigo-400 cursor-pointer z-10 relative' : 'cursor-default'}`}
+                  style={{
+                    backgroundColor: getColor(value),
+                    color: getTextColor(value),
+                    fontWeight: value !== null && Math.abs(value) > 0.5 ? 700 : 400
+                  }}
+                  title={`${rowName} ↔ ${colName}\nPearson: ${value !== null ? value.toFixed(3) : "N/A"}`}
+                >
+                  {value !== null ? (value === 1.0 ? "1.0" : value.toFixed(2)) : "—"}
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>

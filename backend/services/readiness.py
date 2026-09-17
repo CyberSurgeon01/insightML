@@ -114,6 +114,20 @@ def assess_ml_readiness(df: pd.DataFrame, target: str, task_type: str = "auto") 
             
             skewness = float(numeric_s.skew()) if len(numeric_s) > 2 else None
             
+            # Target histogram
+            hist_data = []
+            try:
+                import numpy as np
+                counts, bin_edges = np.histogram(numeric_s.dropna(), bins=10)
+                for i in range(len(counts)):
+                    hist_data.append({
+                        "bin_start": float(bin_edges[i]),
+                        "bin_end": float(bin_edges[i+1]),
+                        "count": int(counts[i])
+                    })
+            except Exception:
+                pass
+                
             reg_details = RegressionDetails(
                 count=len(numeric_s),
                 missing_values=int(total_val - len(numeric_s)),
@@ -124,7 +138,8 @@ def assess_ml_readiness(df: pd.DataFrame, target: str, task_type: str = "auto") 
                 std_dev=float(numeric_s.std()),
                 skewness=skewness,
                 outlier_summary=f"{len(outliers)} rows ({len(outliers)/len(numeric_s):.1%}) are potential outliers.",
-                enough_variation=bool(numeric_s.std() > 0)
+                enough_variation=bool(numeric_s.std() > 0),
+                target_histogram=hist_data
             )
             
             if skewness and abs(skewness) > 1.0:

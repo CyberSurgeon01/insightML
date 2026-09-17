@@ -83,3 +83,4 @@ export default function DashboardShell({ data, file, onReset }: DashboardShellPr
     </div>
   );
 }
+

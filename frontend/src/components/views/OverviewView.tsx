@@ -3,12 +3,13 @@
  */
 "use client";
 
-import { LayoutDashboard, AlertTriangle, ArrowRight, Lightbulb, Rows, Columns, FileX, Copy } from "lucide-react";
-import type { UploadResponse } from "@/types/dataset";
+import { LayoutDashboard, AlertTriangle, ArrowRight, Lightbulb, Rows, Columns, FileX, Copy, Layers, Activity } from "lucide-react";
+import type { UploadResponse, InsightResult } from "@/types/dataset";
+import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 
 interface OverviewViewProps {
   data: UploadResponse;
-  onChangeView: (view: string) => void;
+  onChangeView: (viewId: string) => void;
   qualityCount: number;
 }
 
@@ -17,6 +18,31 @@ export default function OverviewView({ data, onChangeView, qualityCount }: Overv
   const totalCells = data.rows * data.columns;
   const missingCells = data.profile.total_missing;
   const duplicateRows = data.quality.warnings.find(w => w.issue_title.includes("Duplicate"))?.count || 0;
+
+  const featureTypeData = [
+    { name: "Numerical", value: data.profile.numerical_count, color: "#6366f1" },
+    { name: "Categorical", value: data.profile.categorical_count, color: "#10b981" },
+    { name: "Boolean", value: data.profile.boolean_count, color: "#8b5cf6" },
+    { name: "Datetime", value: data.profile.datetime_count, color: "#f59e0b" },
+  ].filter(d => d.value > 0);
+
+  const qualitySeverityData = [
+    { 
+      name: "Critical", 
+      count: data.quality.warnings.filter(w => w.severity === "Critical").length,
+      fill: "#ef4444"
+    },
+    { 
+      name: "Warning", 
+      count: data.quality.warnings.filter(w => w.severity === "Warning").length,
+      fill: "#f59e0b"
+    },
+    { 
+      name: "Info", 
+      count: data.quality.warnings.filter(w => w.severity === "Info").length,
+      fill: "#3b82f6"
+    }
+  ];
 
   return (
     <div className="space-y-6">
@@ -94,23 +120,63 @@ export default function OverviewView({ data, onChangeView, qualityCount }: Overv
           </div>
         </div>
 
-        {/* Quick Links Column */}
+        {/* Visual Explorer Snapshot Column */}
         <div className="space-y-4">
+          
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 className="text-[13px] font-bold text-navy mb-4 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-indigo-500" />
+              Feature Types
+            </h3>
+            <div className="h-[140px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={featureTypeData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={60} stroke="none">
+                    {featureTypeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12px' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center mt-2">
+              {featureTypeData.map(d => (
+                <div key={d.name} className="flex items-center gap-1 text-[11px] font-medium text-slate-600">
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></div>
+                  {d.name} ({d.value})
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div 
             onClick={() => onChangeView("quality")}
             className="group cursor-pointer bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all"
           >
-            <div className="flex items-start justify-between mb-2">
-              <h3 className="text-[14px] font-bold text-navy">Data Quality</h3>
+            <div className="flex items-start justify-between mb-4">
+              <h3 className="text-[13px] font-bold text-navy flex items-center gap-2">
+                <Activity className="w-4 h-4 text-rose-500" />
+                Quality Snapshot
+              </h3>
               <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
             </div>
-            {qualityCount > 0 ? (
-              <div className="flex items-center gap-2 text-rose-600 text-[13px] font-medium bg-rose-50 p-2 rounded-lg">
-                <AlertTriangle className="w-4 h-4" /> {qualityCount} issues require attention
-              </div>
-            ) : (
-              <div className="text-[13px] text-emerald-600 font-medium">Dataset is clean!</div>
-            )}
+            
+            <div className="h-[40px] w-full mb-3 rounded-md overflow-hidden flex bg-slate-100">
+              {qualitySeverityData.map(d => d.count > 0 && (
+                <div 
+                  key={d.name} 
+                  style={{ width: `${(d.count / (data.quality.warnings.length || 1)) * 100}%`, backgroundColor: d.fill }}
+                  className="h-full flex items-center justify-center group-hover:opacity-90 transition-opacity"
+                  title={`${d.name}: ${d.count}`}
+                />
+              ))}
+            </div>
+            
+            <div className="flex justify-between items-center text-[11px] font-medium text-slate-600">
+              <span>{qualityCount > 0 ? `${qualityCount} critical/warnings` : "Dataset is clean"}</span>
+              <span className="text-slate-400">Total: {data.quality.warnings.length}</span>
+            </div>
           </div>
 
           <div 

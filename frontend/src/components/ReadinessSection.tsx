@@ -7,10 +7,11 @@
 "use client";
 
 import { useState } from "react";
-import { Target, CheckCircle2, XCircle, AlertTriangle, Info, Play, Loader2 } from "lucide-react";
+import { Target, CheckCircle2, XCircle, AlertTriangle, Info, Play, Loader2, ArrowRight } from "lucide-react";
 import type { UploadResponse, MLReadinessResponse } from "@/types/dataset";
 import { assessMlReadiness } from "@/lib/api";
 import BaselineSection from "./BaselineSection";
+import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from "recharts";
 
 interface ReadinessSectionProps {
   data: UploadResponse;
@@ -163,44 +164,79 @@ export default function ReadinessSection({ data, file }: ReadinessSectionProps) 
               </h3>
               
               {readiness.classification && (
-                <div className="space-y-3 text-[13px]">
-                  <div className="flex justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Majority Class Share</span>
-                    <span className="font-medium text-navy">{(readiness.classification.majority_class_percentage * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="flex justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Minority Class Count</span>
-                    <span className="font-medium text-navy">{readiness.classification.minority_class_count} rows</span>
-                  </div>
-                  
-                  {readiness.classification.imbalance_warning && (
-                    <div className="flex items-start gap-2 mt-2 text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
-                      <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                      <span className="text-[12px]">Severe class imbalance detected.</span>
+                <div className="space-y-4 text-[13px]">
+                  {readiness.classification.class_counts && (
+                    <div className="h-[120px] w-full bg-slate-50 border border-slate-100 rounded-lg p-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={Object.entries(readiness.classification.class_counts).map(([name, count]) => ({ name, count }))} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                          <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <RechartsTooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '11px' }} />
+                          <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
                   )}
-                  {readiness.classification.rare_class_warning && (
-                    <div className="flex items-start gap-2 mt-2 text-red-700 bg-red-50 p-2 rounded border border-red-200">
-                      <XCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                      <span className="text-[12px]">Some classes have &lt;5 examples.</span>
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between border-b border-slate-100 pb-2">
+                      <span className="text-slate-500">Majority Class Share</span>
+                      <span className="font-medium text-navy">{(readiness.classification.majority_class_percentage * 100).toFixed(1)}%</span>
                     </div>
-                  )}
+                    <div className="flex justify-between border-b border-slate-100 pb-2">
+                      <span className="text-slate-500">Minority Class Count</span>
+                      <span className="font-medium text-navy">{readiness.classification.minority_class_count} rows</span>
+                    </div>
+                    
+                    {readiness.classification.imbalance_warning && (
+                      <div className="flex items-start gap-2 mt-2 text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
+                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span className="text-[12px]">Severe class imbalance detected.</span>
+                      </div>
+                    )}
+                    {readiness.classification.rare_class_warning && (
+                      <div className="flex items-start gap-2 mt-2 text-red-700 bg-red-50 p-2 rounded border border-red-200">
+                        <XCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span className="text-[12px]">Some classes have &lt;5 examples.</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
               {readiness.regression && (
-                <div className="space-y-3 text-[13px]">
-                  <div className="flex justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Mean / Median</span>
-                    <span className="font-medium text-navy">{readiness.regression.mean.toFixed(2)} / {readiness.regression.median.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-slate-100 pb-2">
-                    <span className="text-slate-500">Range</span>
-                    <span className="font-medium text-navy">{readiness.regression.minimum.toFixed(2)} to {readiness.regression.maximum.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between pb-2">
-                    <span className="text-slate-500">Outliers (IQR)</span>
-                    <span className="font-medium text-navy">{readiness.regression.outlier_summary}</span>
+                <div className="space-y-4 text-[13px]">
+                  {readiness.regression.target_histogram && (
+                    <div className="h-[120px] w-full bg-slate-50 border border-slate-100 rounded-lg p-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={readiness.regression.target_histogram} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                          <XAxis dataKey="bin_start" tickFormatter={val => val.toFixed(1)} tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                          <RechartsTooltip 
+                            cursor={{ fill: '#f8fafc' }} 
+                            contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '11px' }} 
+                            labelFormatter={(label, payload) => payload.length ? `${payload[0].payload.bin_start.toFixed(2)} - ${payload[0].payload.bin_end.toFixed(2)}` : label}
+                            formatter={(val) => [val, 'Count']}
+                          />
+                          <Bar dataKey="count" fill="#10b981" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between border-b border-slate-100 pb-2">
+                      <span className="text-slate-500">Mean / Median</span>
+                      <span className="font-medium text-navy">{readiness.regression.mean.toFixed(2)} / {readiness.regression.median.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between border-b border-slate-100 pb-2">
+                      <span className="text-slate-500">Range</span>
+                      <span className="font-medium text-navy">{readiness.regression.minimum.toFixed(2)} to {readiness.regression.maximum.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between pb-2">
+                      <span className="text-slate-500">Outliers (IQR)</span>
+                      <span className="font-medium text-navy">{readiness.regression.outlier_summary}</span>
+                    </div>
                   </div>
                 </div>
               )}

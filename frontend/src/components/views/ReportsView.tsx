@@ -21,3 +21,4 @@ export default function ReportsView({ data }: { data: UploadResponse }) {
     </div>
   );
 }
+

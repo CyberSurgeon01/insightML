@@ -35,6 +35,15 @@ export interface ColumnProfile {
 
   /** Median value (numerical columns only) */
   median: number | null;
+
+  /** Outlier count (numerical columns only) */
+  outlier_count?: number | null;
+
+  /** Histogram bins (numerical columns only) */
+  histogram?: Array<{ bin_start: number; bin_end: number; count: number }> | null;
+
+  /** Value counts (categorical/boolean columns only) */
+  value_counts?: Array<{ category: string; count: number }> | null;
 }
 
 /** Full dataset profile */
@@ -80,6 +89,7 @@ export interface RelationshipResult {
   pairs: RelationshipPair[];
   top_relationships: RelationshipPair[];
   correlation_matrix: CorrelationMatrix;
+  scatter_samples?: Record<string, Record<string, Array<{ x: number; y: number }>>> | null;
   info_messages: string[];
 }
 
@@ -217,6 +227,7 @@ export interface RegressionDetails {
   skewness: number | null;
   outlier_summary: string;
   enough_variation: boolean;
+  target_histogram?: Array<{ bin_start: number; bin_end: number; count: number }> | null;
 }
 
 export interface FeatureReadiness {

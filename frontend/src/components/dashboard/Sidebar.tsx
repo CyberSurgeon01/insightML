@@ -117,3 +117,4 @@ export default function Sidebar({ activeView, onChangeView, qualityWarningCount,
     </>
   );
 }
+
