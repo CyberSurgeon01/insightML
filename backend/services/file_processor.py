@@ -13,6 +13,7 @@ import pandas as pd
 
 from services.profiler import profile_dataset
 from services.relationships import analyze_relationships
+from services.categorical import analyze_categorical
 
 # ── Limits ──────────────────────────────────────────────────────────────────
 MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024   # 50 MB
@@ -86,6 +87,9 @@ def process_upload(
     # 7. Analyze relationships (Phase 4)
     relationships = analyze_relationships(df)
 
+    # 8. Analyze categorical relationships (Phase 5)
+    categorical = analyze_categorical(df)
+
     return {
         "filename": filename,
         "format": ext.lstrip(".").upper(),
@@ -96,6 +100,7 @@ def process_upload(
         "preview": preview,
         "profile": profile,
         "relationships": relationships,
+        "categorical": categorical,
     }
 
 
