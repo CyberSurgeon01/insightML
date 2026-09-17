@@ -7,7 +7,10 @@
 
 import type { UploadResponse } from "@/types/dataset";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+// We use an empty string by default because Next.js rewrites in next.config.js
+// proxy the requests from /api/* to the backend at localhost:8000.
+// This allows the app to work seamlessly across the local network (e.g. from an iPad).
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 /**
  * Upload a file to the backend and return the parsed response.
