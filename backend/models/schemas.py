@@ -176,6 +176,26 @@ class QualityResult(BaseModel):
     outliers: list[OutlierDetail]
 
 
+# ── Insights models (Phase 7) ────────────────────────────────────────────────
+
+class InsightEvidence(BaseModel):
+    metrics: dict[str, Any]
+    affected_columns: list[str]
+
+class Insight(BaseModel):
+    insight_id: str
+    priority: str  # High, Medium, Low
+    category: str  # Data Quality, Numerical Relationship, Categorical Relationship, Distribution, Recommendation
+    title: str
+    summary: str
+    evidence: InsightEvidence
+    recommended_action: str
+    source_section: str  # quality, relationships, categorical, profile
+
+class InsightResult(BaseModel):
+    insights: list[Insight]
+
+
 # ── Upload response ──────────────────────────────────────────────────────────
 
 
@@ -217,3 +237,6 @@ class UploadResponse(BaseModel):
 
     quality: QualityResult | None = None
     """Data quality warnings and recommendations."""
+
+    insights: InsightResult | None = None
+    """Generated smart insights (Phase 7)."""

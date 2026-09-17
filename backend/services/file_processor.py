@@ -15,6 +15,7 @@ from services.profiler import profile_dataset
 from services.relationships import analyze_relationships
 from services.categorical import analyze_categorical
 from services.quality import analyze_quality
+from services.insights import analyze_insights
 
 # ── Limits ──────────────────────────────────────────────────────────────────
 MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024   # 50 MB
@@ -94,6 +95,9 @@ def process_upload(
     # 9. Data Quality Analysis (Phase 6)
     quality = analyze_quality(df)
 
+    # 10. Smart Insights (Phase 7)
+    insights = analyze_insights(profile, relationships, categorical, quality)
+
     return {
         "filename": filename,
         "format": ext.lstrip(".").upper(),
@@ -106,6 +110,7 @@ def process_upload(
         "relationships": relationships,
         "categorical": categorical,
         "quality": quality,
+        "insights": insights,
     }
 
 

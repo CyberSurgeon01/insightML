@@ -57,3 +57,4 @@ export default function QualitySummary({ quality }: { quality: QualityResult }) 
     </div>
   );
 }
+

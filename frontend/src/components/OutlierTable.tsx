@@ -39,3 +39,4 @@ export default function OutlierTable({ outliers }: { outliers: OutlierDetail[] }
     </div>
   );
 }
+

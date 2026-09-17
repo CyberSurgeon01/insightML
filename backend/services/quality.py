@@ -205,3 +205,4 @@ def analyze_quality(df: pd.DataFrame) -> dict[str, Any]:
         "warnings": warnings,
         "outliers": outliers
     }
+

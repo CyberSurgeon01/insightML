@@ -46,6 +46,12 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Outlier Detection:** Utilizes standard IQR boundaries.
 - **Non-destructive:** InsightML automatically analyzes and reports these issues; it **never** alters, cleans, or deletes uploaded data.
 
+### Phase 7 — Smart Insights and Recommendations
+- **Rule-Based Engine:** Deterministically synthesizes results from Profile, Relationships, and Quality checks.
+- **Prioritization:** Ranks critical quality issues over general correlations.
+- **Evidence-Backed:** Avoids AI hallucinations by directly linking each insight to exact statistical metrics (e.g., Pearson correlations, Cramér's V).
+- **Jump Links:** Interactive anchor links allow users to navigate directly from the TL;DR insights to the corresponding deeper analytical charts.
+
 ---
 
 ## Project Structure
@@ -161,3 +167,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 4 | ✅ Complete | Correlation & relationship explorer |
 | 5 | ✅ Complete | Categorical Relationship Analysis |
 | 6 | ✅ Complete | Data Quality Warnings & Recommendations |
+| 7 | ✅ Complete | Smart Insights and Recommendations |

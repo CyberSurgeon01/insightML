@@ -106,3 +106,4 @@ export default function QualityList({ warnings }: QualityListProps) {
     </div>
   );
 }
+

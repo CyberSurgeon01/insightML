@@ -24,6 +24,7 @@ import ColumnDetails from "@/components/ColumnDetails";
 import RelationshipsSection from "@/components/RelationshipsSection";
 import CategoricalSection from "@/components/CategoricalSection";
 import QualitySection from "@/components/QualitySection";
+import InsightsSection from "@/components/InsightsSection";
 import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
 import type { UploadResponse, UploadState } from "@/types/dataset";
@@ -131,18 +132,29 @@ export default function Home() {
                 <SuccessCard data={result} />
               </div>
 
-              {/* Phase 3: Dataset profile */}
-              <ProfileSummary profile={result.profile} />
-              <ColumnDetails profile={result.profile} />
+              {/* Phase 7: Smart Insights */}
+              <InsightsSection insightsResult={result.insights} />
+
+              {/* Phase 3: Dataset Profile */}
+              <div id="profile">
+                <ProfileSummary profile={result.profile} />
+                <ColumnDetails profile={result.profile} />
+              </div>
 
               {/* Phase 4: Feature Relationships */}
-              <RelationshipsSection relationships={result.relationships} />
+              <div id="relationships">
+                <RelationshipsSection relationships={result.relationships} />
+              </div>
 
               {/* Phase 5: Categorical Relationships */}
-              <CategoricalSection categorical={result.categorical} />
+              <div id="categorical">
+                <CategoricalSection categorical={result.categorical} />
+              </div>
 
               {/* Phase 6: Data Quality */}
-              <QualitySection quality={result.quality} />
+              <div id="quality">
+                <QualitySection quality={result.quality} />
+              </div>
 
               {/* Phase 2: Row preview */}
               <DataPreview data={result} />

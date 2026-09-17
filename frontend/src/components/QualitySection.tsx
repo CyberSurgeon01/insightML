@@ -53,3 +53,4 @@ export default function QualitySection({ quality }: { quality?: QualityResult })
     </div>
   );
 }
+

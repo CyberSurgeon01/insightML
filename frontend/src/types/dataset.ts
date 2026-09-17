@@ -159,6 +159,29 @@ export interface QualityResult {
 }
 
 
+// ── Insights models (Phase 7) ───────────────────────────────────────────────
+
+export interface InsightEvidence {
+  metrics: Record<string, any>;
+  affected_columns: string[];
+}
+
+export interface Insight {
+  insight_id: string;
+  priority: "High" | "Medium" | "Low";
+  category: "Data Quality" | "Numerical Relationship" | "Categorical Relationship" | "Distribution" | "Recommendation";
+  title: string;
+  summary: string;
+  evidence: InsightEvidence;
+  recommended_action: string;
+  source_section: string;
+}
+
+export interface InsightResult {
+  insights: Insight[];
+}
+
+
 // ── Upload response ─────────────────────────────────────────────────────────
 
 /** The JSON response returned by POST /api/datasets/upload */
@@ -195,6 +218,9 @@ export interface UploadResponse {
 
   /** Data Quality Warnings (Phase 6) */
   quality?: QualityResult;
+
+  /** Smart Insights (Phase 7) */
+  insights?: InsightResult;
 }
 
 /** Possible UI states for the upload flow */
