@@ -23,6 +23,7 @@ import ProfileSummary from "@/components/ProfileSummary";
 import ColumnDetails from "@/components/ColumnDetails";
 import RelationshipsSection from "@/components/RelationshipsSection";
 import CategoricalSection from "@/components/CategoricalSection";
+import QualitySection from "@/components/QualitySection";
 import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
 import type { UploadResponse, UploadState } from "@/types/dataset";
@@ -139,6 +140,9 @@ export default function Home() {
 
               {/* Phase 5: Categorical Relationships */}
               <CategoricalSection categorical={result.categorical} />
+
+              {/* Phase 6: Data Quality */}
+              <QualitySection quality={result.quality} />
 
               {/* Phase 2: Row preview */}
               <DataPreview data={result} />

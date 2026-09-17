@@ -40,6 +40,12 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Interactive Explorer:** Select a category and a numeric feature to see group-level statistics and a responsive CSS bar chart.
 - **Performance Limits:** Caps at 15 distinct categories per variable, samples down to 50,000 rows, and requires at least 5 rows per category group to guarantee stable statistics.
 
+### Phase 6 — Data Quality Warnings
+- **Automated Scanning:** Detects duplicates, extreme sparsity, constant/empty columns, imbalanced categories, and numerical outliers.
+- **Categorical Formatting Checks:** Identifies whitespace variants and mixed types.
+- **Outlier Detection:** Utilizes standard IQR boundaries.
+- **Non-destructive:** InsightML automatically analyzes and reports these issues; it **never** alters, cleans, or deletes uploaded data.
+
 ---
 
 ## Project Structure
@@ -154,3 +160,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 3 | ✅ Complete | Dataset profiler with column details |
 | 4 | ✅ Complete | Correlation & relationship explorer |
 | 5 | ✅ Complete | Categorical Relationship Analysis |
+| 6 | ✅ Complete | Data Quality Warnings & Recommendations |

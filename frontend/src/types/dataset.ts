@@ -125,6 +125,40 @@ export interface CategoricalResult {
 }
 
 
+// ── Quality models (Phase 6) ────────────────────────────────────────────────
+
+export interface QualityWarning {
+  warning_id: string;
+  severity: "Critical" | "Warning" | "Info";
+  category: string;
+  affected_columns: string[];
+  issue_title: string;
+  explanation: string;
+  count: number;
+  percentage: number;
+  recommendation: string;
+}
+
+export interface OutlierDetail {
+  column: string;
+  outlier_count: number;
+  outlier_percentage: number;
+  lower_bound: number;
+  upper_bound: number;
+}
+
+export interface QualityResult {
+  total_warnings: number;
+  critical_count: number;
+  warning_count: number;
+  info_count: number;
+  total_duplicate_rows: number;
+  total_missing_cells: number;
+  warnings: QualityWarning[];
+  outliers: OutlierDetail[];
+}
+
+
 // ── Upload response ─────────────────────────────────────────────────────────
 
 /** The JSON response returned by POST /api/datasets/upload */
@@ -158,6 +192,9 @@ export interface UploadResponse {
 
   /** Categorical relationships (Phase 5) */
   categorical?: CategoricalResult;
+
+  /** Data Quality Warnings (Phase 6) */
+  quality?: QualityResult;
 }
 
 /** Possible UI states for the upload flow */

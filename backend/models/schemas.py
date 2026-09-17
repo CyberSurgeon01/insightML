@@ -145,6 +145,37 @@ class CategoricalResult(BaseModel):
     info_messages: list[str]
 
 
+# ── Quality models (Phase 6) ─────────────────────────────────────────────────
+
+class QualityWarning(BaseModel):
+    warning_id: str
+    severity: str  # Critical, Warning, Info
+    category: str  # Missing, Duplicates, Distribution, Format, Outliers
+    affected_columns: list[str]
+    issue_title: str
+    explanation: str
+    count: int
+    percentage: float
+    recommendation: str
+
+class OutlierDetail(BaseModel):
+    column: str
+    outlier_count: int
+    outlier_percentage: float
+    lower_bound: float
+    upper_bound: float
+
+class QualityResult(BaseModel):
+    total_warnings: int
+    critical_count: int
+    warning_count: int
+    info_count: int
+    total_duplicate_rows: int
+    total_missing_cells: int
+    warnings: list[QualityWarning]
+    outliers: list[OutlierDetail]
+
+
 # ── Upload response ──────────────────────────────────────────────────────────
 
 
@@ -183,3 +214,6 @@ class UploadResponse(BaseModel):
 
     categorical: CategoricalResult | None = None
     """Categorical relationships (Cramer's V, ANOVA)."""
+
+    quality: QualityResult | None = None
+    """Data quality warnings and recommendations."""
