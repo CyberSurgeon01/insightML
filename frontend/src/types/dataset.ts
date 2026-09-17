@@ -244,6 +244,48 @@ export interface MLReadinessResponse {
   recommendations: Recommendation[];
 }
 
+// ── Phase 10 Baseline Models ────────────────────────────────────────────────
+
+export interface MetricComparison {
+  metric_name: string;
+  baseline_score: number;
+  dummy_score: number;
+  is_better: boolean;
+}
+
+export interface ClassificationMetrics {
+  accuracy: MetricComparison;
+  precision: MetricComparison;
+  recall: MetricComparison;
+  f1: MetricComparison;
+  roc_auc: MetricComparison | null;
+  confusion_matrix: number[][];
+  classes: string[];
+  class_report: any;
+}
+
+export interface RegressionMetrics {
+  r2: MetricComparison;
+  mae: MetricComparison;
+  rmse: MetricComparison;
+  actual_vs_predicted: Array<{ actual: number; predicted: number }>;
+}
+
+export interface BaselineModelResponse {
+  task_type: string;
+  model_name: string;
+  dummy_model_name: string;
+  training_rows: number;
+  test_rows: number;
+  excluded_rows: number;
+  selected_features: string[];
+  preprocessing_summary: string[];
+  classification_metrics: ClassificationMetrics | null;
+  regression_metrics: RegressionMetrics | null;
+  outperformed_dummy: boolean;
+  caveat: string;
+}
+
 // ── Upload response ─────────────────────────────────────────────────────────
 
 /** The JSON response returned by POST /api/datasets/upload */

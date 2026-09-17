@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Target, CheckCircle2, XCircle, AlertTriangle, Info, Play, Loader2 } from "lucide-react";
 import type { UploadResponse, MLReadinessResponse } from "@/types/dataset";
 import { assessMlReadiness } from "@/lib/api";
+import BaselineSection from "./BaselineSection";
 
 interface ReadinessSectionProps {
   data: UploadResponse;
@@ -273,6 +274,9 @@ export default function ReadinessSection({ data, file }: ReadinessSectionProps) 
         </div>
       )}
 
+      {readiness && <BaselineSection data={data} file={file} readiness={readiness} />}
+
     </div>
   );
 }
+

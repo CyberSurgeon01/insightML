@@ -252,6 +252,46 @@ class MLReadinessResponse(BaseModel):
     recommendations: list[Recommendation]
 
 
+# ── Phase 10 Baseline Model ──────────────────────────────────────────────────
+
+class MetricComparison(BaseModel):
+    metric_name: str
+    baseline_score: float
+    dummy_score: float
+    is_better: bool
+
+class ClassificationMetrics(BaseModel):
+    accuracy: MetricComparison
+    precision: MetricComparison
+    recall: MetricComparison
+    f1: MetricComparison
+    roc_auc: MetricComparison | None = None
+    confusion_matrix: list[list[int]] # 2D array
+    classes: list[str]
+    class_report: dict # Classification report dict
+
+class RegressionMetrics(BaseModel):
+    r2: MetricComparison
+    mae: MetricComparison
+    rmse: MetricComparison
+    actual_vs_predicted: list[dict[str, float]] # [{"actual": 1.0, "predicted": 1.1}, ...]
+
+class BaselineModelResponse(BaseModel):
+    task_type: str
+    model_name: str
+    dummy_model_name: str
+    training_rows: int
+    test_rows: int
+    excluded_rows: int
+    selected_features: list[str]
+    preprocessing_summary: list[str]
+    classification_metrics: ClassificationMetrics | None = None
+    regression_metrics: RegressionMetrics | None = None
+    outperformed_dummy: bool
+    caveat: str
+
+
+
 # ── Upload response ──────────────────────────────────────────────────────────
 
 

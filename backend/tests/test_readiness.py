@@ -81,3 +81,4 @@ def test_target_not_found():
     )
     assert resp.status_code == 400
     assert "not found" in resp.text
+

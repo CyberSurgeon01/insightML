@@ -124,3 +124,34 @@ export async function assessMlReadiness(
 
   return res.json() as Promise<import("@/types/dataset").MLReadinessResponse>;
 }
+
+export async function trainBaselineModel(
+  file: File,
+  targetColumn: string,
+  taskType: string,
+  features: string[],
+  leakageConfirmed: boolean
+): Promise<import("@/types/dataset").BaselineModelResponse> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("target_column", targetColumn);
+  formData.append("task_type", taskType);
+  formData.append("features", JSON.stringify(features));
+  if (leakageConfirmed) formData.append("leakage_confirmed", "true");
+
+  const res = await fetch(`${API_BASE_URL}/api/models/baseline`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    let detail = "Failed to train baseline model.";
+    try {
+      const data = await res.json();
+      if (data?.detail) detail = data.detail;
+    } catch {}
+    throw new Error(detail);
+  }
+
+  return res.json() as Promise<import("@/types/dataset").BaselineModelResponse>;
+}

@@ -63,6 +63,12 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Feature Exclusion:** Identifies and filters likely ID columns, constants, and mostly-empty columns.
 - **Class Imbalance Warnings:** Detects rare classes or severe class imbalances for classification tasks.
 
+### Phase 10 — Baseline Model Training & Evaluation
+- **Stateless Pipeline:** Models are trained entirely in memory and safely destroyed immediately after evaluation.
+- **Scikit-Learn Integration:** Real train/test splitting (80/20 with stratification), median/mode imputation, scaling, and one-hot encoding.
+- **Dummy Comparisons:** Rigorously scores Baseline models (Logistic Regression / Ridge) against Dummy baselines to prove authentic predictive lift.
+- **Safety Limits:** Implements maximum row sub-sampling on extremely large files and max cardinality limits for fast browser feedback.
+
 ---
 
 ## Project Structure
@@ -181,3 +187,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 7 | ✅ Complete | Smart Insights and Recommendations |
 | 8 | ✅ Complete | Exportable Analysis Reports |
 | 9 | ✅ Complete | Target Selection & ML Readiness |
+| 10 | ✅ Complete | Baseline Model Training and Evaluation |
