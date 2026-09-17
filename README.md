@@ -52,6 +52,10 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Evidence-Backed:** Avoids AI hallucinations by directly linking each insight to exact statistical metrics (e.g., Pearson correlations, Cramér's V).
 - **Jump Links:** Interactive anchor links allow users to navigate directly from the TL;DR insights to the corresponding deeper analytical charts.
 
+### Phase 8 — Exportable Analysis Reports
+- **Stateless Exports:** Instantly generate downloadable files directly from the browser context without storing user data on a server database.
+- **Formats:** Supports full JSON raw payloads, flattened CSVs for any specific analysis module, and a stylized Executive PDF powered by `fpdf2`.
+
 ---
 
 ## Project Structure
@@ -168,3 +172,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 5 | ✅ Complete | Categorical Relationship Analysis |
 | 6 | ✅ Complete | Data Quality Warnings & Recommendations |
 | 7 | ✅ Complete | Smart Insights and Recommendations |
+| 8 | ✅ Complete | Exportable Analysis Reports |

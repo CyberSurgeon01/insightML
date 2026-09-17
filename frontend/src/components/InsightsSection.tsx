@@ -150,3 +150,4 @@ export default function InsightsSection({ insightsResult }: InsightsSectionProps
     </div>
   );
 }
+

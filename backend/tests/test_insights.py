@@ -57,3 +57,4 @@ def test_id_insight():
     
     titles = [i["title"] for i in insights]
     assert "Likely Identifier Column" in titles
+

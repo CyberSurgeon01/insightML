@@ -10,7 +10,7 @@ Run with:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import datasets
+from routers import datasets, export
 
 # ── App ──────────────────────────────────────────────────────────────────────
 
@@ -38,6 +38,7 @@ app.add_middleware(
 # ── Routers ───────────────────────────────────────────────────────────────────
 
 app.include_router(datasets.router)
+app.include_router(export.router)
 
 
 # ── Health check ──────────────────────────────────────────────────────────────

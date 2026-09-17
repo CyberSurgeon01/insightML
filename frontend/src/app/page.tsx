@@ -25,6 +25,7 @@ import RelationshipsSection from "@/components/RelationshipsSection";
 import CategoricalSection from "@/components/CategoricalSection";
 import QualitySection from "@/components/QualitySection";
 import InsightsSection from "@/components/InsightsSection";
+import ExportSection from "@/components/ExportSection";
 import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
 import type { UploadResponse, UploadState } from "@/types/dataset";
@@ -134,6 +135,9 @@ export default function Home() {
 
               {/* Phase 7: Smart Insights */}
               <InsightsSection insightsResult={result.insights} />
+
+              {/* Phase 8: Exports */}
+              <ExportSection data={result} />
 
               {/* Phase 3: Dataset Profile */}
               <div id="profile">

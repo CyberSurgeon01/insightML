@@ -171,3 +171,4 @@ def analyze_insights(profile: dict, relationships: dict, categorical: dict, qual
     return {
         "insights": insights[:12]
     }
+
