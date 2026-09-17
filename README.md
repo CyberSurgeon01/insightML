@@ -56,6 +56,13 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Stateless Exports:** Instantly generate downloadable files directly from the browser context without storing user data on a server database.
 - **Formats:** Supports full JSON raw payloads, flattened CSVs for any specific analysis module, and a stylized Executive PDF powered by `fpdf2`.
 
+### Phase 9 — Target Selection & ML Readiness
+- **Task Auto-Detection:** Recommends Classification vs. Regression based on unique values and target properties.
+- **Model-Free Assessment:** Evaluates target health (missing data, minimum unique values) without training weights.
+- **Leakage Prevention:** Checks for exact target duplicates and highly correlated numerical columns.
+- **Feature Exclusion:** Identifies and filters likely ID columns, constants, and mostly-empty columns.
+- **Class Imbalance Warnings:** Detects rare classes or severe class imbalances for classification tasks.
+
 ---
 
 ## Project Structure
@@ -173,3 +180,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 6 | ✅ Complete | Data Quality Warnings & Recommendations |
 | 7 | ✅ Complete | Smart Insights and Recommendations |
 | 8 | ✅ Complete | Exportable Analysis Reports |
+| 9 | ✅ Complete | Target Selection & ML Readiness |

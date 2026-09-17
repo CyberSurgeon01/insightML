@@ -196,6 +196,62 @@ class InsightResult(BaseModel):
     insights: list[Insight]
 
 
+# ── ML Readiness models (Phase 9) ────────────────────────────────────────────
+
+class TargetAssessment(BaseModel):
+    target_name: str
+    inferred_task_type: str
+    user_selected_task_type: str
+    total_values: int
+    missing_values: int
+    unique_values: int
+    data_type: str
+    health_status: str
+    blocking_issues: list[str]
+
+class ClassificationDetails(BaseModel):
+    class_counts: dict[str, int]
+    class_percentages: dict[str, float]
+    majority_class_percentage: float
+    minority_class_count: int
+    imbalance_warning: bool
+    rare_class_warning: bool
+    enough_samples: bool
+
+class RegressionDetails(BaseModel):
+    count: int
+    missing_values: int
+    minimum: float
+    maximum: float
+    mean: float
+    median: float
+    std_dev: float
+    skewness: float | None = None
+    outlier_summary: str
+    enough_variation: bool
+
+class FeatureReadiness(BaseModel):
+    recommended_features: list[str]
+    excluded_features: list[dict[str, str]]  # list of {"column": "name", "reason": "why"}
+    potential_risk_columns: list[str]
+
+class LeakageWarning(BaseModel):
+    column: str
+    reason: str
+
+class Recommendation(BaseModel):
+    priority: str
+    action: str
+
+class MLReadinessResponse(BaseModel):
+    target: TargetAssessment
+    classification: ClassificationDetails | None = None
+    regression: RegressionDetails | None = None
+    features: FeatureReadiness
+    leakage: list[LeakageWarning]
+    recommendations: list[Recommendation]
+
+
 # ── Upload response ──────────────────────────────────────────────────────────
 
 

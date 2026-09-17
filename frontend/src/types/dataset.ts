@@ -182,6 +182,68 @@ export interface InsightResult {
 }
 
 
+// ── ML Readiness models (Phase 9) ───────────────────────────────────────────
+
+export interface TargetAssessment {
+  target_name: string;
+  inferred_task_type: string;
+  user_selected_task_type: string;
+  total_values: number;
+  missing_values: number;
+  unique_values: number;
+  data_type: string;
+  health_status: string;
+  blocking_issues: string[];
+}
+
+export interface ClassificationDetails {
+  class_counts: Record<string, number>;
+  class_percentages: Record<string, number>;
+  majority_class_percentage: number;
+  minority_class_count: number;
+  imbalance_warning: boolean;
+  rare_class_warning: boolean;
+  enough_samples: boolean;
+}
+
+export interface RegressionDetails {
+  count: number;
+  missing_values: number;
+  minimum: number;
+  maximum: number;
+  mean: number;
+  median: number;
+  std_dev: number;
+  skewness: number | null;
+  outlier_summary: string;
+  enough_variation: boolean;
+}
+
+export interface FeatureReadiness {
+  recommended_features: string[];
+  excluded_features: Array<{ column: string; reason: string }>;
+  potential_risk_columns: string[];
+}
+
+export interface LeakageWarning {
+  column: string;
+  reason: string;
+}
+
+export interface Recommendation {
+  priority: string;
+  action: string;
+}
+
+export interface MLReadinessResponse {
+  target: TargetAssessment;
+  classification: ClassificationDetails | null;
+  regression: RegressionDetails | null;
+  features: FeatureReadiness;
+  leakage: LeakageWarning[];
+  recommendations: Recommendation[];
+}
+
 // ── Upload response ─────────────────────────────────────────────────────────
 
 /** The JSON response returned by POST /api/datasets/upload */

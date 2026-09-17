@@ -97,3 +97,30 @@ function triggerDownload(blob: Blob, filename: string) {
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 }
+
+export async function assessMlReadiness(
+  file: File,
+  targetColumn: string,
+  taskType: string = "auto"
+): Promise<import("@/types/dataset").MLReadinessResponse> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("target_column", targetColumn);
+  formData.append("task_type", taskType);
+
+  const res = await fetch(`${API_BASE_URL}/api/ml-readiness`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    let detail = "Failed to assess ML readiness.";
+    try {
+      const data = await res.json();
+      if (data?.detail) detail = data.detail;
+    } catch {}
+    throw new Error(detail);
+  }
+
+  return res.json() as Promise<import("@/types/dataset").MLReadinessResponse>;
+}

@@ -25,6 +25,7 @@ import RelationshipsSection from "@/components/RelationshipsSection";
 import CategoricalSection from "@/components/CategoricalSection";
 import QualitySection from "@/components/QualitySection";
 import InsightsSection from "@/components/InsightsSection";
+import ReadinessSection from "@/components/ReadinessSection";
 import ExportSection from "@/components/ExportSection";
 import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
@@ -35,6 +36,7 @@ import type { UploadResponse, UploadState } from "@/types/dataset";
 export default function Home() {
   const [state, setState] = useState<UploadState>("idle");
   const [result, setResult] = useState<UploadResponse | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   // Called by UploadZone when the user picks/drops a valid file.
@@ -46,6 +48,7 @@ export default function Home() {
     try {
       const data = await uploadDataset(file);
       setResult(data);
+      setUploadedFile(file);
       setState("success");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "An unexpected error occurred.");
@@ -56,6 +59,7 @@ export default function Home() {
   function handleReset() {
     setState("idle");
     setResult(null);
+    setUploadedFile(null);
     setErrorMsg("");
   }
 
@@ -135,6 +139,9 @@ export default function Home() {
 
               {/* Phase 7: Smart Insights */}
               <InsightsSection insightsResult={result.insights} />
+
+              {/* Phase 9: ML Readiness */}
+              {uploadedFile && <ReadinessSection data={result} file={uploadedFile} />}
 
               {/* Phase 8: Exports */}
               <ExportSection data={result} />
