@@ -22,6 +22,7 @@ import SuccessCard from "@/components/SuccessCard";
 import ProfileSummary from "@/components/ProfileSummary";
 import ColumnDetails from "@/components/ColumnDetails";
 import RelationshipsSection from "@/components/RelationshipsSection";
+import CategoricalSection from "@/components/CategoricalSection";
 import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
 import type { UploadResponse, UploadState } from "@/types/dataset";
@@ -135,6 +136,9 @@ export default function Home() {
 
               {/* Phase 4: Feature Relationships */}
               <RelationshipsSection relationships={result.relationships} />
+
+              {/* Phase 5: Categorical Relationships */}
+              <CategoricalSection categorical={result.categorical} />
 
               {/* Phase 2: Row preview */}
               <DataPreview data={result} />
