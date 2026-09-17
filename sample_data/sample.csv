@@ -1,0 +1,16 @@
+id,name,age,city,salary,department,start_date,rating,remote,notes
+1,Alice Johnson,31,New York,95000,Engineering,2021-03-15,4.8,true,Senior engineer
+2,Bob Smith,27,San Francisco,82000,Design,2022-07-01,4.2,false,UI specialist
+3,Carol White,45,Austin,120000,Management,2018-01-10,4.9,true,Team lead
+4,David Lee,38,Seattle,105000,Engineering,2020-05-20,4.5,true,Backend dev
+5,Eva Martinez,29,Chicago,78000,Marketing,2023-02-14,3.9,false,Growth hacker
+6,Frank Brown,52,New York,135000,Engineering,2015-11-30,4.7,false,Principal eng
+7,Grace Chen,34,Austin,92000,Data Science,2019-09-01,4.6,true,ML researcher
+8,Hank Wilson,41,Boston,110000,Product,2017-04-22,4.3,false,PM
+9,Iris Taylor,26,Denver,72000,Design,2023-06-18,4.0,true,Junior designer
+10,James Garcia,36,Miami,88000,Sales,2020-10-05,4.1,false,Account exec
+11,Karen Anderson,48,Portland,115000,Engineering,2016-08-12,4.8,true,Architect
+12,Leo Nguyen,30,Seattle,96000,Data Science,2021-12-03,4.4,true,Data analyst
+13,Mia Robinson,33,San Francisco,102000,Engineering,2019-03-27,4.6,false,Full-stack
+14,Noah Clark,44,New York,128000,Management,2014-05-15,4.9,false,VP Eng
+15,Olivia Hall,28,Austin,81000,Marketing,2022-09-20,4.0,true,Content lead
