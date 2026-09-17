@@ -108,6 +108,43 @@ class RelationshipResult(BaseModel):
     info_messages: list[str]
 
 
+# ── Categorical models (Phase 5) ─────────────────────────────────────────────
+
+class CatCatPair(BaseModel):
+    feature_a: str
+    feature_b: str
+    cramers_v: float
+    p_value: float
+    valid_rows: int
+    strength: str
+
+class GroupStat(BaseModel):
+    category: str
+    count: int
+    mean: float
+    median: float
+    min: float
+    max: float
+
+class CatNumPair(BaseModel):
+    categorical_feature: str
+    numerical_feature: str
+    eta_squared: float
+    p_value: float
+    valid_rows: int
+    strength: str
+    groups: list[GroupStat]
+
+class CategoricalResult(BaseModel):
+    cat_columns_analyzed: list[str]
+    num_columns_analyzed: list[str]
+    skipped_columns: list[SkippedColumn]
+    cat_cat_pairs: list[CatCatPair]
+    cat_num_pairs: list[CatNumPair]
+    top_cat_cat: list[CatCatPair]
+    info_messages: list[str]
+
+
 # ── Upload response ──────────────────────────────────────────────────────────
 
 
@@ -143,3 +180,6 @@ class UploadResponse(BaseModel):
 
     relationships: RelationshipResult | None = None
     """Pairwise numerical relationships (Pearson, Spearman, MI)."""
+
+    categorical: CategoricalResult | None = None
+    """Categorical relationships (Cramer's V, ANOVA)."""
