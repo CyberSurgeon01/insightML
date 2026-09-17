@@ -34,6 +34,12 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
   - Deterministically samples 50,000 rows for datasets larger than this threshold.
   - Automatically skips all-null, constant-value, and likely ID columns.
 
+### Phase 5 — Categorical Relationship Analysis
+- **Cramér's V (Cat ↔ Cat):** Identifies associations between categorical variables with bias correction.
+- **ANOVA & Eta-squared (Cat ↔ Num):** Measures effect size of categorical variables on numerical outcomes.
+- **Interactive Explorer:** Select a category and a numeric feature to see group-level statistics and a responsive CSS bar chart.
+- **Performance Limits:** Caps at 15 distinct categories per variable, samples down to 50,000 rows, and requires at least 5 rows per category group to guarantee stable statistics.
+
 ---
 
 ## Project Structure
@@ -147,4 +153,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 2 | ✅ Complete | Dataset upload, preview, stat card |
 | 3 | ✅ Complete | Dataset profiler with column details |
 | 4 | ✅ Complete | Correlation & relationship explorer |
-| 5 | 🔜 Planned | Model training (AutoML) |
+| 5 | ✅ Complete | Categorical Relationship Analysis |
