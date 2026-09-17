@@ -1,37 +1,14 @@
 /**
  * src/app/page.tsx
- *
- * Main page – handles upload (Phase 2) and profiling display (Phase 3).
- *
- * State machine:
- *   idle     → user sees the upload zone
- *   loading  → spinner while request is in flight
- *   success  → success card + profile + column details + preview
- *   error    → error banner shown below upload zone
- *
- * Uploading a new file from any state resets back to loading.
  */
-
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Search, Loader2, AlertCircle, RefreshCw } from "lucide-react";
-
 import UploadZone from "@/components/UploadZone";
-import SuccessCard from "@/components/SuccessCard";
-import ProfileSummary from "@/components/ProfileSummary";
-import ColumnDetails from "@/components/ColumnDetails";
-import RelationshipsSection from "@/components/RelationshipsSection";
-import CategoricalSection from "@/components/CategoricalSection";
-import QualitySection from "@/components/QualitySection";
-import InsightsSection from "@/components/InsightsSection";
-import ReadinessSection from "@/components/ReadinessSection";
-import ExportSection from "@/components/ExportSection";
-import DataPreview from "@/components/DataPreview";
 import { uploadDataset } from "@/lib/api";
 import type { UploadResponse, UploadState } from "@/types/dataset";
-
-// ── Page component ────────────────────────────────────────────────────────────
+import DashboardShell from "@/components/dashboard/DashboardShell";
 
 export default function Home() {
   const [state, setState] = useState<UploadState>("idle");
@@ -39,7 +16,6 @@ export default function Home() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  // Called by UploadZone when the user picks/drops a valid file.
   async function handleFile(file: File) {
     setState("loading");
     setResult(null);
@@ -61,123 +37,74 @@ export default function Home() {
     setResult(null);
     setUploadedFile(null);
     setErrorMsg("");
+    // We optionally remove the view query param by navigating to /
+    window.history.replaceState({}, "", "/");
   }
 
+  // Dashboard state: Hide the hero upload screen entirely
+  if (state === "success" && result && uploadedFile) {
+    return (
+      <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="w-6 h-6 animate-spin text-indigo-600" /></div>}>
+        <DashboardShell data={result} file={uploadedFile} onReset={handleReset} />
+      </Suspense>
+    );
+  }
+
+  // Upload Landing State
   return (
-    <main className="min-h-screen flex flex-col">
-      {/* ── Top nav ─────────────────────────────────────────────────────────── */}
-      <nav className="px-8 py-5">
+    <main className="min-h-screen flex flex-col bg-slate-50">
+      <nav className="px-8 py-5 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-2">
-          <Search className="w-5 h-5 text-navy" strokeWidth={2.5} />
+          <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center text-white text-[12px] font-black">I</div>
           <span className="text-[17px] font-bold text-navy tracking-tight">
             InsightML
           </span>
         </div>
       </nav>
 
-      {/* ── Content ──────────────────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center px-4 pt-12 pb-16">
-        {/* Card — wider max-width now to accommodate the column details table */}
-        <div className="w-full max-w-4xl flex flex-col items-center gap-8">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-16">
+        <div className="w-full max-w-4xl flex flex-col items-center gap-8 -mt-20">
 
-          {/* Heading */}
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-navy tracking-tight mb-2">
+            <h1 className="text-4xl font-black text-navy tracking-tight mb-3">
               Upload your dataset
             </h1>
             <p className="text-slate-500 text-[15px]">
-              CSV and XLSX supported
+              CSV and XLSX supported. All processing happens in-memory.
             </p>
           </div>
 
-          {/* Upload zone */}
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-2xl bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
             <UploadZone onFile={handleFile} disabled={state === "loading"} />
           </div>
 
-          {/* ── State-dependent panels ──────────────────────────────────────── */}
-
-          {/* Loading */}
           {state === "loading" && (
-            <div className="flex items-center gap-3 text-slate-500 text-[14px]">
-              <Loader2 className="w-5 h-5 animate-spin text-accent" />
-              <span>Uploading and analysing your file…</span>
+            <div className="flex items-center gap-3 text-slate-500 text-[14px] bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm animate-pulse">
+              <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+              <span className="font-medium text-navy">Uploading and analysing your file…</span>
             </div>
           )}
 
-          {/* Error */}
           {state === "error" && (
             <div
               role="alert"
-              className="w-full max-w-2xl rounded-xl border border-red-200 bg-red-50 px-5 py-4 flex items-start gap-3"
+              className="w-full max-w-2xl rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 flex items-start gap-3 shadow-sm"
             >
-              <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+              <AlertCircle className="w-5 h-5 text-rose-500 mt-0.5 shrink-0" />
               <div className="flex-1">
-                <p className="text-[14px] font-semibold text-red-700 mb-0.5">
+                <p className="text-[14px] font-bold text-rose-800 mb-0.5">
                   Upload failed
                 </p>
-                <p className="text-[13px] text-red-600">{errorMsg}</p>
+                <p className="text-[13px] text-rose-700">{errorMsg}</p>
               </div>
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1.5 text-[12px] text-red-500 hover:text-red-700 transition-colors shrink-0 mt-0.5"
-                title="Try again"
+                className="flex items-center gap-1.5 text-[12px] font-medium text-rose-600 bg-rose-100 hover:bg-rose-200 px-3 py-1.5 rounded-lg transition-colors shrink-0"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Try again
               </button>
             </div>
-          )}
-
-          {/* Success */}
-          {state === "success" && result && (
-            <>
-              {/* Phase 2: Upload success card */}
-              <div className="w-full max-w-2xl">
-                <SuccessCard data={result} />
-              </div>
-
-              {/* Phase 7: Smart Insights */}
-              <InsightsSection insightsResult={result.insights} />
-
-              {/* Phase 9: ML Readiness */}
-              {uploadedFile && <ReadinessSection data={result} file={uploadedFile} />}
-
-              {/* Phase 8: Exports */}
-              <ExportSection data={result} />
-
-              {/* Phase 3: Dataset Profile */}
-              <div id="profile">
-                <ProfileSummary profile={result.profile} />
-                <ColumnDetails profile={result.profile} />
-              </div>
-
-              {/* Phase 4: Feature Relationships */}
-              <div id="relationships">
-                <RelationshipsSection relationships={result.relationships} />
-              </div>
-
-              {/* Phase 5: Categorical Relationships */}
-              <div id="categorical">
-                <CategoricalSection categorical={result.categorical} />
-              </div>
-
-              {/* Phase 6: Data Quality */}
-              <div id="quality">
-                <QualitySection quality={result.quality} />
-              </div>
-
-              {/* Phase 2: Row preview */}
-              <DataPreview data={result} />
-
-              {/* Upload another */}
-              <button
-                onClick={handleReset}
-                className="text-[13px] text-slate-400 hover:text-accent transition-colors underline underline-offset-2"
-              >
-                Upload a different file
-              </button>
-            </>
           )}
         </div>
       </div>

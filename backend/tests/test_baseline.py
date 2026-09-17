@@ -96,3 +96,4 @@ def test_missing_target_dropped():
     
     assert data["excluded_rows"] == 5
     assert data["training_rows"] + data["test_rows"] == 50
+

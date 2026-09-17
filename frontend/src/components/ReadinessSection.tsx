@@ -158,7 +158,9 @@ export default function ReadinessSection({ data, file }: ReadinessSectionProps) 
 
             {/* Task Details Card */}
             <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-              <h3 className="text-[14px] font-bold text-navy mb-4 capitalize">{readiness.target.inferred_task_type} Details</h3>
+              <h3 className="text-[14px] font-bold text-navy mb-4 capitalize">
+                {(readiness.target.user_selected_task_type === 'auto' ? readiness.target.inferred_task_type : readiness.target.user_selected_task_type)} Details
+              </h3>
               
               {readiness.classification && (
                 <div className="space-y-3 text-[13px]">

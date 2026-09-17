@@ -244,3 +244,4 @@ def train_baseline(df: pd.DataFrame, target: str, task_type: str, features: list
         )
     else:
         raise ValueError(f"Unknown task type: {task_type}")
+

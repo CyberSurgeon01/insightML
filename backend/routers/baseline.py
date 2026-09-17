@@ -53,3 +53,4 @@ async def create_baseline_model(
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Model training failed: {str(e)}")
+

@@ -315,16 +315,16 @@ export interface UploadResponse {
   profile: DatasetProfile;
 
   /** Pairwise numerical relationships (Phase 4) */
-  relationships?: RelationshipResult;
+  numerical_relationships: RelationshipResult;
 
   /** Categorical relationships (Phase 5) */
-  categorical?: CategoricalResult;
+  categorical_relationships: CategoricalResult;
 
   /** Data Quality Warnings (Phase 6) */
-  quality?: QualityResult;
+  quality: QualityResult;
 
   /** Smart Insights (Phase 7) */
-  insights?: InsightResult;
+  insights: InsightResult;
 }
 
 /** Possible UI states for the upload flow */

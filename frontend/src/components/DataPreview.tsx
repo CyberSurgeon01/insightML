@@ -39,9 +39,9 @@ export default function DataPreview({ data }: DataPreviewProps) {
 
       {/* Table (collapsible) */}
       {isOpen && (
-        <div className="overflow-x-auto border-t border-slate-100">
-          <table className="w-full text-[13px] text-left">
-            <thead className="bg-slate-50 text-slate-500 font-medium uppercase tracking-wider text-[11px]">
+        <div className="max-h-[500px] overflow-auto custom-scrollbar">
+          <table className="w-full text-left text-[13px] border-collapse">
+            <thead className="sticky top-0 z-10 bg-slate-50 shadow-sm text-slate-500 font-medium border-b border-slate-200 uppercase tracking-wider text-[11px]">
               <tr>
                 {data.column_names.map((col) => (
                   <th

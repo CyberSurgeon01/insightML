@@ -69,6 +69,11 @@ A startup-style ML data exploration tool. Upload a CSV or XLSX dataset and get i
 - **Dummy Comparisons:** Rigorously scores Baseline models (Logistic Regression / Ridge) against Dummy baselines to prove authentic predictive lift.
 - **Safety Limits:** Implements maximum row sub-sampling on extremely large files and max cardinality limits for fast browser feedback.
 
+### Phase 11 — Interactive Task-Oriented Dashboard
+- **Workspace Redesign:** Removed the infinite-scroll single page and replaced it with a multi-view Dashboard.
+- **Client-Side State Persistence:** Clicking through the sidebar views (`Overview`, `Profile`, `Relationships`, etc.) uses URL state and retains all backend computation perfectly without re-uploading the file.
+- **Improved UX:** Bounded scrolling for extremely large tables, collapsible mobile navigation drawer, and polished KPI cards.
+
 ---
 
 ## Project Structure
@@ -188,3 +193,4 @@ curl -s -X POST http://localhost:8000/api/datasets/upload \
 | 8 | ✅ Complete | Exportable Analysis Reports |
 | 9 | ✅ Complete | Target Selection & ML Readiness |
 | 10 | ✅ Complete | Baseline Model Training and Evaluation |
+| 11 | ✅ Complete | Modern Dashboard Refactor |
